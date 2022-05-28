@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Admin/AdminDashBoard.dart';
-import 'package:flutter_v1/DashboardPage.dart';
+import 'package:flutter_v1/User/DashboardPage.dart';
 import 'package:flutter_v1/Dialogs/Dialogs.dart';
-import 'package:flutter_v1/OwnedPlacesPage.dart';
 import 'package:flutter_v1/RecoveryPage.dart';
 import 'package:flutter_v1/RegisterPage.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
+import 'package:flutter_v1/constants/constants.dart';
+
+import 'Owner/OwnedPlacesPage.dart';
+import 'Templates/SignInPageTemplate.dart';
+import 'Widgets/BuildPasswordTextField.dart';
+import 'Widgets/BuildTextField.dart';
+import 'Widgets/LinearColoredButton.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -62,12 +67,12 @@ class _SignInPageState extends State<SignInPage> {
               child: const Text(
                 'Forgot password ?',
                 style: TextStyle(
-                  color: Color(0xff08AFBF),
+                  color: secondaryColor,
                 ),
               ),
             ),
             const SizedBox(
-              height: 140,
+              height: 120,
             ),
             GestureDetector(
               onTap: () async {
@@ -75,7 +80,7 @@ class _SignInPageState extends State<SignInPage> {
                   showDialog<void>(
                     context: context,
                     barrierDismissible: false,
-                    builder: (context) => ErrorDialog(
+                    builder: (context) => const ErrorDialog(
                       title: 'Sorry',
                       text:
                           'All of fields are required,\nplease fill all of them.',
@@ -85,7 +90,7 @@ class _SignInPageState extends State<SignInPage> {
                   showDialog<void>(
                     context: context,
                     barrierDismissible: false,
-                    builder: (context) => WaitingDialog(),
+                    builder: (context) => const WaitingDialog(),
                   );
                   bool isValid = await AuthServices.signIn(_email, _password);
                   String userType = AuthServices.signedInUser.userType;
@@ -110,7 +115,7 @@ class _SignInPageState extends State<SignInPage> {
                     showDialog<void>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => ErrorDialog(
+                      builder: (context) => const ErrorDialog(
                         title: 'Wrong Input',
                         text:
                             'This email or password is wrong.\nPlease try again.',
@@ -149,7 +154,7 @@ class _SignInPageState extends State<SignInPage> {
                       'Register',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Color(0xff08AFBF),
+                        color: secondaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

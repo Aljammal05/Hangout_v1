@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
+import 'package:flutter_v1/constants/constants.dart';
 import 'Dialogs/Dialogs.dart';
+import 'Templates/SignInPageTemplate.dart';
+import 'Widgets/AnimatedToggle.dart';
+import 'Widgets/BuildPasswordTextField.dart';
+import 'Widgets/BuildTextField.dart';
+import 'Widgets/LinearColoredButton.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -13,7 +18,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   int _toggleValue = 0;
   String _name = '', _email = '', _password = '', _phoneNO = '', _city = '';
-  var _changedCity;
+  String? _changedCity;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: SizedBox(
-                height: 330,
+                height: 310,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -131,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     onChanged: (val) {
                                       setState(
                                         () {
-                                          _changedCity = val;
+                                          _changedCity = val as String?;
                                           _city = val.toString();
                                         },
                                       );
@@ -150,7 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15.0, left: 20, right: 20),
+              padding: const EdgeInsets.only(top: 25.0, left: 20, right: 20),
               child: GestureDetector(
                 onTap: () {
                   if (_email.isEmpty ||
@@ -161,7 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     showDialog<void>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => ErrorDialog(
+                      builder: (context) => const ErrorDialog(
                         title: 'Sorry',
                         text:
                             'All of fields are required,\nplease fill all of them.',
@@ -171,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     showDialog<void>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => ErrorDialog(
+                      builder: (context) => const ErrorDialog(
                         title: 'Invalid Password',
                         text:
                             'Please make sure your password \ncontain 8 digits or more',
@@ -184,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           showDialog<void>(
                             context: context,
                             barrierDismissible: false,
-                            builder: (context) => WaitingDialog(),
+                            builder: (context) => const WaitingDialog(),
                           );
                           bool isValid = await AuthServices.signUp(
                               _name,
@@ -219,7 +224,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(bottom: 16.0,top: 6),
               child: TextButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -237,7 +242,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'Login',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Color(0xff08AFBF),
+                        color: secondaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

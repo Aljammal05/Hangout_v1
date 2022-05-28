@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
 import 'package:flutter_v1/constants/constants.dart';
+
+import '../Templates/DashboardTemplate.dart';
+import '../Widgets/PlaceWidget.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage(
@@ -26,14 +28,14 @@ class _DashboardPageState extends State<DashboardPage> {
   List<PlaceWidget> _dash1 = [];
   List<PlaceWidget> _dash2 = [];
 
-  var _query = placesref
+  var _query = placesReference
       .where(
         'city',
         isEqualTo: '',
       )
       .where('status', isEqualTo: 'accepted');
 
-  var _stream = placesref
+  var _stream = placesReference
       .where(
         'city',
         isEqualTo: '',
@@ -46,11 +48,11 @@ class _DashboardPageState extends State<DashboardPage> {
     setState(
       () {
         if (widget.city == '*') {
-          _query = placesref.where('city', isEqualTo: city);
+          _query = placesReference.where('city', isEqualTo: city);
         } else if (widget.city.isNotEmpty) {
-          _query = placesref.where('city', isEqualTo: widget.city);
+          _query = placesReference.where('city', isEqualTo: widget.city);
         }
-        if (widget.city.isEmpty) _query = placesref;
+        if (widget.city.isEmpty) _query = placesReference;
         if (widget.area.isNotEmpty) {
           _query = _query.where('area', isEqualTo: widget.area);
         }
@@ -122,7 +124,6 @@ class _DashboardPageState extends State<DashboardPage> {
         _dash2.shuffle();
 
         return DashboardTemplate(
-          backgroundImagePath: 'image/waterfall-wallpaper.jpg',
           pageTittle: 'Dashboard',
           child: Padding(
             padding: const EdgeInsets.all(8.0),

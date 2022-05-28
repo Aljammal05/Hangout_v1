@@ -1,15 +1,15 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_v1/DashboardPage.dart';
-import 'package:flutter_v1/FavoritesPage.dart';
-import 'package:flutter_v1/FilterPage.dart';
-import 'package:flutter_v1/OwnedPlacesPage.dart';
+import 'package:flutter_v1/User/DashboardPage.dart';
+import 'package:flutter_v1/User/FavoritesPage.dart';
 import 'package:flutter_v1/ProfilePage.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
 import 'package:flutter_v1/SettingsPage.dart';
 import 'package:flutter_v1/SignInPage.dart';
+import 'package:flutter_v1/constants/constants.dart';
+
+import 'Owner/OwnedPlacesPage.dart';
+import 'User/FilterPage.dart';
 
 class MenuDrawerPage extends StatefulWidget {
   const MenuDrawerPage({Key? key}) : super(key: key);
@@ -39,10 +39,7 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
               gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: <Color>[
-              Color(0xff02ECB9),
-              Color(0xff0C89C3)
-            ], // red to yellow
+            colors: linearGradiantColors, // red to yellow
             tileMode: TileMode.repeated,
           )),
           child: Padding(
@@ -112,8 +109,8 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
                         ),
                         Expanded(
                           flex: 1,
-                          child:
-                              MenuContainer(Icons.person, const ProfilePage(), () {}),
+                          child: MenuContainer(
+                              Icons.person, const ProfilePage(), () {}),
                         ),
                       ],
                     ),
@@ -125,13 +122,13 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
                               ? MenuContainer(
                                   Icons.favorite, const FavoritesPage(), () {})
                               : MenuContainer(
-                                  Icons.settings, SettingPage(), () {}),
+                                  Icons.settings, const SettingPage(), () {}),
                         ),
                         Expanded(
                           flex: 1,
                           child: AuthServices.signedInUser.userType == 'user'
                               ? MenuContainer(
-                                  Icons.settings, SettingPage(), () {})
+                                  Icons.settings, const SettingPage(), () {})
                               : MenuContainer(
                                   Icons.logout,
                                   const SignInPage(),
@@ -147,8 +144,8 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
                             children: [
                               Expanded(
                                   flex: 1,
-                                  child: MenuContainer(
-                                      Icons.explore, const FilterPage(), () {})),
+                                  child: MenuContainer(Icons.explore,
+                                      const FilterPage(), () {})),
                               Expanded(
                                 flex: 1,
                                 child: MenuContainer(
@@ -180,7 +177,7 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
                       Padding(
                         padding: EdgeInsets.only(left: 50.0),
                         child: Text(
-                          'T3leleh@gmail.com',
+                          'Hangout@gmail.com',
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ),
@@ -196,9 +193,10 @@ class _MenuDrawerPageState extends State<MenuDrawerPage> {
   }
 }
 
-class MenuContainer extends StatefulWidget {//todo refactor
+class MenuContainer extends StatefulWidget {
 
-  const MenuContainer(this.icon, this.destination, this.onTap, {Key? key}) : super(key: key);
+  const MenuContainer(this.icon, this.destination, this.onTap, {Key? key})
+      : super(key: key);
   final IconData icon;
   final Widget destination;
   final Function onTap;
@@ -211,12 +209,19 @@ class _MenuContainerState extends State<MenuContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          widget.onTap();
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return SafeArea(child: widget.destination);
-          }));
-        });
+        setState(
+          () {
+            widget.onTap();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SafeArea(child: widget.destination);
+                },
+              ),
+            );
+          },
+        );
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),

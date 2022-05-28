@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_v1/DashboardPage.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
+import 'package:flutter_v1/User/DashboardPage.dart';
+import 'package:flutter_v1/constants/constants.dart';
 import 'package:flutter_v1/lists/Lists.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../Templates/DashboardTemplate.dart';
+import '../Widgets/CategoryFilterButton.dart';
+import '../Widgets/DropDownBox.dart';
+import '../Widgets/LinearColoredButton.dart';
 
 class FilterPage extends StatefulWidget {
   const FilterPage({Key? key}) : super(key: key);
@@ -19,7 +24,6 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     return DashboardTemplate(
-      backgroundImagePath: 'image/petra.jpg',
       pageTittle: 'Filter',
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -28,10 +32,10 @@ class _FilterPageState extends State<FilterPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
-              child: Dropdownbox(
-                const ['Amman', 'Zarqa', 'Aqaba', 'Irbid'],
-                'Select your City',
-                (val) {
+              child: DropDownBox(
+                values: const ['Amman', 'Zarqa', 'Aqaba', 'Irbid'],
+                hint: 'Select your City',
+                onSelect: (val) {
                   setState(
                     () {
                       _city = val;
@@ -42,10 +46,10 @@ class _FilterPageState extends State<FilterPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
-              child: Dropdownbox(
-                selectedCity(_city),
-                'Select your Area',
-                (val) {
+              child: DropDownBox(
+                values: selectedCity(_city),
+                hint: 'Select your Area',
+                onSelect: (val) {
                   _area = val;
                 },
               ),
@@ -60,21 +64,21 @@ class _FilterPageState extends State<FilterPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CategoryWidget(
-                  'image/gaming-category.png',
-                  () {
+                CategoryFilterButton(
+                  imagePath: 'image/gaming-category.png',
+                  onTap: () {
                     _gaming = _gaming.isEmpty ? 'gaming' : '';
                   },
                 ),
-                CategoryWidget(
-                  'image/tourism-category.png',
-                  () {
+                CategoryFilterButton(
+                  imagePath: 'image/tourism-category.png',
+                  onTap: () {
                     _tourism = _tourism.isEmpty ? 'tourism' : '';
                   },
                 ),
-                CategoryWidget(
-                  'image/relax-category.png',
-                  () {
+                CategoryFilterButton(
+                  imagePath: 'image/relax-category.png',
+                  onTap: () {
                     _relax = _relax.isEmpty ? 'relax' : '';
                   },
                 ),
@@ -109,7 +113,7 @@ class _FilterPageState extends State<FilterPage> {
                         child: FloatingActionButton(
                           heroTag: 'h1',
                           child: const Icon(Icons.add),
-                          backgroundColor: const Color(0xb83AAEC2),
+                          backgroundColor: secondaryColorHalfOpacity,
                           onPressed: () {
                             setState(
                               () {
@@ -132,7 +136,7 @@ class _FilterPageState extends State<FilterPage> {
                             FontAwesomeIcons.minus,
                             size: 14,
                           ),
-                          backgroundColor: const Color(0xb83AAEC2),
+                          backgroundColor: secondaryColorHalfOpacity,
                           onPressed: () {
                             setState(
                               () {
@@ -176,7 +180,7 @@ class _FilterPageState extends State<FilterPage> {
               min: 0,
               max: 150,
               divisions: 30,
-              activeColor: const Color(0xff3AAEC2),
+              activeColor: secondaryColor,
               inactiveColor: const Color(0xffffffff),
               onChanged: (newValue) {
                 setState(

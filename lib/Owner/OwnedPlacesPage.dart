@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_v1/AddPlace.dart';
+import 'package:flutter_v1/Owner/AddPlace.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
+import 'package:flutter_v1/constants/constants.dart';
+
+import '../Templates/DashboardTemplate.dart';
+import '../Widgets/PlaceWidget.dart';
 
 class OwnedPlacesPage extends StatefulWidget {
   const OwnedPlacesPage({Key? key}) : super(key: key);
@@ -58,7 +61,6 @@ class _OwnedPlacesPageState extends State<OwnedPlacesPage> {
     return Stack(
       children: [
         DashboardTemplate(
-          backgroundImagePath: 'image/waterfall-wallpaper.jpg',
           pageTittle: 'Owned Places',
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -87,7 +89,7 @@ class _OwnedPlacesPageState extends State<OwnedPlacesPage> {
           right: 15,
           bottom: 15,
           child: FloatingActionButton(
-            backgroundColor: const Color(0xff3AAEC2),
+            backgroundColor: secondaryColor,
             onPressed: () {
               setState(
                 () {

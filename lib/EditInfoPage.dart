@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Dialogs/Dialogs.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
-import 'package:flutter_v1/SettingsPage.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
 import 'package:flutter_v1/constants/constants.dart';
+
+import 'Templates/SignInPageTemplate.dart';
+import 'Widgets/BuildTextField.dart';
+import 'Widgets/LinearColoredButton.dart';
 
 class EditInfoPage extends StatefulWidget {
   const EditInfoPage({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class EditInfoPage extends StatefulWidget {
 }
 
 class _EditInfoPageState extends State<EditInfoPage> {
-  var _changedCity;
+  String? _changedCity;
   String _name = '';
   @override
   Widget build(BuildContext context) {
@@ -91,7 +93,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                         onChanged: (val) {
                           setState(
                             () {
-                              _changedCity = val;
+                              _changedCity = val as String?;
                             },
                           );
                         },
@@ -112,7 +114,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                         showDialog<void>(
                           context: context,
                           barrierDismissible: false,
-                          builder: (context) => ErrorDialog(
+                          builder: (context) => const ErrorDialog(
                             title: 'Invalid Input',
                             text:
                                 'You haven\'t make any changes,\nPlease try again. ',
@@ -122,31 +124,26 @@ class _EditInfoPageState extends State<EditInfoPage> {
                         showDialog<void>(
                           context: context,
                           barrierDismissible: false,
-                          builder: (context) => WaitingDialog(),
+                          builder: (context) => const WaitingDialog(),
                         );
                         if (_name.isNotEmpty) {
-                          usersref.doc(AuthServices.signedInUser.id).update(
+                          usersReference.doc(AuthServices.signedInUser.id).update(
                             {
                               'name': _name,
                             },
                           );
+                          AuthServices.signedInUser.name = _name;
                         }
                         if (_changedCity != null) {
-                          usersref.doc(AuthServices.signedInUser.id).update(
+                          usersReference.doc(AuthServices.signedInUser.id).update(
                             {
                               'city': _changedCity.toString(),
                             },
                           );
+                          AuthServices.signedInUser.city = _changedCity!;
                         }
                         Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SafeArea(child: SettingPage());
-                            },
-                          ),
-                        );
+                        Navigator.pop(context);
                       }
                     },
                   );

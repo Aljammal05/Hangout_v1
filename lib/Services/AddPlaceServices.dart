@@ -15,7 +15,7 @@ class AddPlaceServices {
       String category,
       ) async {
     try {
-      placesref.doc(name + '-' + area).set({
+      placesReference.doc(name + '-' + area).set({
         'ownerID':userID,
         'name': name,
         'description': description,
@@ -28,7 +28,7 @@ class AddPlaceServices {
         'placepicURL': placePicURL,
         'status' : 'pending'
       });
-      usersref.doc(userID).update({
+      usersReference.doc(userID).update({
         'ownedplaces':FieldValue.arrayUnion([name+'-'+area])
       });
       return true;

@@ -1,13 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Dialogs/Dialogs.dart';
-import 'package:flutter_v1/OwnedPlacesPage.dart';
 import 'package:flutter_v1/Services/AddPlaceServices.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
 import 'package:flutter_v1/Services/StorageService.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
+import 'package:flutter_v1/constants/constants.dart';
 import 'package:flutter_v1/lists/Lists.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../Templates/ProfilePageTemplate.dart';
+import '../Widgets/CategoryButton.dart';
+import '../Widgets/DropDownBox.dart';
+import '../Widgets/LinearColoredButton.dart';
+import 'OwnedPlacesPage.dart';
 
 class AddPlace extends StatefulWidget {
   const AddPlace({Key? key}) : super(key: key);
@@ -53,9 +58,9 @@ class _AddPlaceState extends State<AddPlace> {
 
   @override
   Widget build(BuildContext context) {
-    return ImageContainerStackTemplate(
-      displayImage(),
-      Column(
+    return ProfilePageTemplate(
+      image: displayImage(),
+      topChild: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -128,7 +133,7 @@ class _AddPlaceState extends State<AddPlace> {
           )
         ],
       ),
-      Padding(
+      bottomChild: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,19 +250,28 @@ class _AddPlaceState extends State<AddPlace> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => setState(()=>_placeCategory = 'gaming'),
-                    child: Categoryaddplace(
-                        'image/gaming-category.png', _placeCategory == 'gaming' ? const Color(0xb83AAEC2):const Color(0x55ffffff)),
+                    onTap: () => setState(() => _placeCategory = 'gaming'),
+                    child: CategoryButton(
+                        imagePath: 'image/gaming-category.png',
+                        backcolor: _placeCategory == 'gaming'
+                            ? secondaryColorHalfOpacity
+                            : const Color(0x55ffffff)),
                   ),
                   GestureDetector(
-                    onTap: () => setState(()=>_placeCategory = 'tourism'),
-                    child: Categoryaddplace(
-                        'image/tourism-category.png', _placeCategory == 'tourism' ? const Color(0xb83AAEC2):const Color(0x55ffffff)),
+                    onTap: () => setState(() => _placeCategory = 'tourism'),
+                    child: CategoryButton(
+                        imagePath: 'image/tourism-category.png',
+                        backcolor: _placeCategory == 'tourism'
+                            ? secondaryColorHalfOpacity
+                            : const Color(0x55ffffff)),
                   ),
                   GestureDetector(
-                    onTap: () => setState(()=>_placeCategory = 'relax'),
-                    child: Categoryaddplace(
-                        'image/relax-category.png',_placeCategory == 'relax' ? const Color(0xb83AAEC2):const Color(0x55ffffff)),
+                    onTap: () => setState(() => _placeCategory = 'relax'),
+                    child: CategoryButton(
+                        imagePath: 'image/relax-category.png',
+                        backcolor: _placeCategory == 'relax'
+                            ? secondaryColorHalfOpacity
+                            : const Color(0x55ffffff)),
                   ),
                 ],
               ),
@@ -297,7 +311,7 @@ class _AddPlaceState extends State<AddPlace> {
               min: 0,
               max: 25,
               divisions: 25,
-              activeColor: const Color(0xff3AAEC2),
+              activeColor: secondaryColor,
               inactiveColor: const Color(0xffffffff),
               onChanged: (newValue) {
                 setState(
@@ -320,10 +334,10 @@ class _AddPlaceState extends State<AddPlace> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: Dropdownbox(
-                const ['Amman', 'Zarqa', 'Aqaba', 'Irbid'],
-                'Select your City',
-                (val) {
+              child: DropDownBox(
+                values: const ['Amman', 'Zarqa', 'Aqaba', 'Irbid'],
+                hint: 'Select your City',
+                onSelect: (val) {
                   setState(
                     () {
                       _placeCity = val;
@@ -334,10 +348,10 @@ class _AddPlaceState extends State<AddPlace> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: Dropdownbox(
-                selectedCity(_placeCity),
-                'Select your Area',
-                (val) {
+              child: DropDownBox(
+                values: selectedCity(_placeCity),
+                hint: 'Select your Area',
+                onSelect: (val) {
                   _placeArea = val;
                 },
               ),
@@ -445,7 +459,7 @@ class _AddPlaceState extends State<AddPlace> {
                     showDialog<void>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => WaitingDialog(),
+                      builder: (context) => const WaitingDialog(),
                     );
                     _placePicURL = await StorageService.uploadPlacePicture(
                         _placePicURL, _img!);
@@ -485,7 +499,7 @@ class _AddPlaceState extends State<AddPlace> {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false,
-                        builder: (context) => ErrorDialog(
+                        builder: (context) => const ErrorDialog(
                           title: 'Sorry',
                           text:
                               'All of fields are required,\nPlease fill all of them.',
@@ -495,7 +509,7 @@ class _AddPlaceState extends State<AddPlace> {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false,
-                        builder: (context) => ErrorDialog(
+                        builder: (context) => const ErrorDialog(
                           title: 'Invalid Image',
                           text:
                               'Please select image from gallery ,\nOr take one from camera.',
@@ -505,7 +519,7 @@ class _AddPlaceState extends State<AddPlace> {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false,
-                        builder: (context) => ErrorDialog(
+                        builder: (context) => const ErrorDialog(
                           title: 'Invalid Location',
                           text:
                               'Please mark a place location\non the map "Set Location" .',

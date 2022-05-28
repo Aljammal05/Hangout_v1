@@ -2,10 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
 import 'package:flutter_v1/SignInPage.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
 import 'package:flutter_v1/constants/constants.dart';
 import 'package:flutter_v1/models/UserModel.dart';
 import 'Dialogs/Dialogs.dart';
+import 'Templates/SignInPageTemplate.dart';
+import 'Widgets/BuildPasswordTextField.dart';
+import 'Widgets/BuildTextField.dart';
+import 'Widgets/LinearColoredButton.dart';
 
 class EditEmailPage extends StatefulWidget {
   const EditEmailPage({Key? key, this.email = ''}) : super(key: key);
@@ -24,14 +27,14 @@ class _EditEmailPageState extends State<EditEmailPage> {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => WaitingDialog(),
+      builder: (context) => const WaitingDialog(),
     );
 
     user!.reauthenticateWithCredential(cred).then(
       (value) {
         user.updateEmail(newEmail).then(
           (_) {
-            usersref
+            usersReference
                 .doc(AuthServices.signedInUser.id)
                 .update({'email': newEmail});
             AuthServices.signedInUser = UserModel();
@@ -53,7 +56,7 @@ class _EditEmailPageState extends State<EditEmailPage> {
             showDialog<void>(
               context: context,
               barrierDismissible: false,
-              builder: (context) => ErrorDialog(
+              builder: (context) => const ErrorDialog(
                 title: 'Invalid Email',
                 text:
                     'This email address is not available.\nChoose a different address.',
@@ -68,7 +71,7 @@ class _EditEmailPageState extends State<EditEmailPage> {
         showDialog<void>(
           context: context,
           barrierDismissible: false,
-          builder: (context) => ErrorDialog(
+          builder: (context) => const ErrorDialog(
             title: 'Incorrect Password',
             text: 'Password you entered is incorrect.\nPlease try again.',
           ),
@@ -129,10 +132,14 @@ class _EditEmailPageState extends State<EditEmailPage> {
                   setState(
                     () {
                       if (_email.isEmpty || _password.isEmpty) {
-                        ErrorDialog(
-                          title: 'Sorry',
-                          text:
-                              'All of fields are required,\nplease fill all of them.',
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => const ErrorDialog(
+                            title: 'Sorry',
+                            text:
+                                'All of fields are required,\nplease fill all of them.',
+                          ),
                         );
                       } else {
                         changeEmail(_email, _password);

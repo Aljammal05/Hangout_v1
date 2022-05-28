@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Admin/AcceptedPlaces.dart';
 import 'package:flutter_v1/Admin/PendingPlaces.dart';
 import 'package:flutter_v1/SignInPage.dart';
+import 'package:flutter_v1/constants/constants.dart';
 
 class AdminDashBoard extends StatefulWidget {
   const AdminDashBoard({Key? key}) : super(key: key);
@@ -13,10 +13,10 @@ class AdminDashBoard extends StatefulWidget {
 }
 
 class _AdminDashBoardState extends State<AdminDashBoard> {
-  int _selectedtap = 1;
-  List<Widget> _dashboard = [
-    AcceptedPlaces(),
-    PendingPlaces(),
+  int _selectedTap = 1;
+  final List<Widget> _dashboard = [
+    const AcceptedPlaces(),
+    const PendingPlaces(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -27,46 +27,52 @@ class _AdminDashBoardState extends State<AdminDashBoard> {
           leading: Padding(
             padding: const EdgeInsets.all(15.0),
             child: IconButton(
-              onPressed: () async{
+              onPressed: () async {
                 final _auth = FirebaseAuth.instance;
                 _auth.signOut();
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return SafeArea(child: SignInPage());
-                }));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const SafeArea(
+                        child: SignInPage(),
+                      );
+                    },
+                  ),
+                );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.logout,
                 size: 30,
               ),
             ),
           ),
-          backgroundColor: Color(0xff08AFBF),
+          backgroundColor: secondaryColor,
           toolbarHeight: 80,
-          title: Text(
+          title: const Text(
             'DashBoard',
             style: TextStyle(fontSize: 25),
           ),
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
-        body: _dashboard.elementAt(_selectedtap),
+        body: _dashboard.elementAt(_selectedTap),
         bottomNavigationBar: BottomNavigationBar(
           onTap: (index) {
-            setState(() {
-              _selectedtap = index;
-            });
+            setState(
+              () {
+                _selectedTap = index;
+              },
+            );
           },
-          currentIndex: _selectedtap,
+          currentIndex: _selectedTap,
           fixedColor: Colors.white,
-          backgroundColor: Color(0xff08AFBF),
-          items: [
+          backgroundColor: secondaryColor,
+          items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.check_circle),
-
-                label: 'accepted'),
+                icon: Icon(Icons.check_circle), label: 'accepted'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.pending),
-                label: 'pending'),
+                icon: Icon(Icons.pending), label: 'pending'),
           ],
         ),
       ),

@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 
 class StorageService {
   static Future<String> uploadProfilePicture(String url, File imageFile) async {
-    String? uniquePhotoId = Uuid().v4();
+    String? uniquePhotoId = const Uuid().v4();
     File? image = await compressImage(uniquePhotoId, imageFile);
 
     if (url.isNotEmpty) {
@@ -24,7 +24,7 @@ class StorageService {
   }
 
   static Future<String> uploadPlacePicture(String url, File imageFile) async {
-    String? uniquePhotoId = Uuid().v4();
+    String? uniquePhotoId = const Uuid().v4();
     File? image = await compressImage(uniquePhotoId, imageFile);
 
     if (url.isNotEmpty) {

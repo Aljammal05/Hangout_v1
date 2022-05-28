@@ -1,21 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_v1/AddPlace.dart';
-import 'package:flutter_v1/DashboardPage.dart';
+import 'package:flutter_v1/Owner/AddPlace.dart';
+import 'package:flutter_v1/User/DashboardPage.dart';
 import 'package:flutter_v1/Dialogs/Dialogs.dart';
 import 'package:flutter_v1/EditEmailPage.dart';
-import 'package:flutter_v1/EditPlace.dart';
-import 'package:flutter_v1/PlaceMainPage.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
 import 'package:flutter_v1/Services/StorageService.dart';
 import 'package:flutter_v1/SignInPage.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
 import 'dart:io';
 
 import 'package:flutter_v1/constants/constants.dart';
 import 'package:flutter_v1/models/PlaceModel.dart';
 import 'package:flutter_v1/models/UserModel.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'Owner/EditPlace.dart';
+import 'Owner/PlaceMainPage.dart';
+import 'Templates/ProfilePageTemplate.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -61,12 +62,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0x00ffffff),
-      body: ImageContainerStackTemplate(
-        AuthServices.signedInUser.profilePicURL.isNotEmpty
+      body: ProfilePageTemplate(
+        image: AuthServices.signedInUser.profilePicURL.isNotEmpty
             ? NetworkImage(AuthServices.signedInUser.profilePicURL)
             : const AssetImage('image/profile-default-pic.jpg')
                 as ImageProvider,
-        Column(
+        topChild: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -109,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             AuthServices.signedInUser.profilePicURL, img);
                         setState(
                           () {
-                            usersref
+                            usersReference
                                 .doc(AuthServices.signedInUser.id)
                                 .update({'ProfilePicURL': url});
                             AuthServices.signedInUser.profilePicURL = url;
@@ -146,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           AuthServices.signedInUser.profilePicURL, img);
                       setState(
                         () {
-                          usersref
+                          usersReference
                               .doc(AuthServices.signedInUser.id)
                               .update({'ProfilePicURL': url});
                           AuthServices.signedInUser.profilePicURL = url;
@@ -164,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
             )
           ],
         ),
-        Padding(
+        bottomChild: Padding(
           padding: const EdgeInsets.only(top: 20.0, right: 10, left: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -380,23 +381,23 @@ class _ProfilePageState extends State<ProfilePage> {
                             title: 'Delete Account',
                             text:
                                 'Are you sure you want to delete your\naccount? This will permnently erase\nyour account.',
-                            buttontext: 'Delete',
-                            action: () async {
+                            buttonTittle: 'Delete',
+                            onAccept: () async {
                               try {
                                 final user = FirebaseAuth.instance.currentUser;
                                 if (AuthServices.signedInUser.userType ==
                                     'owner') {
-                                  List ownedPlacesIds = await usersref
+                                  List ownedPlacesIds = await usersReference
                                       .doc(AuthServices.signedInUser.id)
                                       .get()
                                       .then((value) =>
                                           value.data()!['ownedplaces']);
                                   for (var place in ownedPlacesIds) {
-                                    placesref.doc(place).delete();
+                                    placesReference.doc(place).delete();
                                   }
                                 }
                                 await user!.delete();
-                                await usersref
+                                await usersReference
                                     .doc(AuthServices.signedInUser.id)
                                     .delete();
                                 AuthServices.signedInUser = UserModel();
@@ -454,7 +455,7 @@ class _RecentWidgetState extends State<RecentWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: placesref.doc(widget.currentPlaceID).get(),
+      future: placesReference.doc(widget.currentPlaceID).get(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -478,7 +479,7 @@ class _RecentWidgetState extends State<RecentWidget> {
                         return SafeArea(
                           child: _usertype == 'user'
                               ? PlaceMainPage(
-                                  currentplaceID: widget.currentPlaceID,
+                                  currentPlaceID: widget.currentPlaceID,
                                 )
                               : EditPlace(
                                   placeModel.costPerPerson,

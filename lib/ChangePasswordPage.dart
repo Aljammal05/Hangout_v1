@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_v1/models/UserModel.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
 import 'package:flutter_v1/SignInPage.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
 import 'package:flutter_v1/constants/constants.dart';
 import 'Dialogs/Dialogs.dart';
+import 'Templates/SignInPageTemplate.dart';
+import 'Widgets/BuildTextField.dart';
+import 'Widgets/LinearColoredButton.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({Key? key}) : super(key: key);
@@ -25,15 +28,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => WaitingDialog(),
+      builder: (context) => const WaitingDialog(),
     );
     user!.reauthenticateWithCredential(cred).then(
       (value) {
         user.updatePassword(newPassword).then(
           (_) {
-            usersref.doc(AuthServices.signedInUser.id).update(
+            usersReference.doc(AuthServices.signedInUser.id).update(
               {'password': newPassword},
             );
+            AuthServices.signedInUser = UserModel();
             Navigator.pop(context);
             Navigator.push(
               context,
@@ -52,7 +56,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             showDialog<void>(
               context: context,
               barrierDismissible: false,
-              builder: (context) => ErrorDialog(
+              builder: (context) => const ErrorDialog(
                 title: 'Invalid Password',
                 text:
                     'The password you entered is invalid.\nMake sure it have 8 digits or more.',
@@ -67,7 +71,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         showDialog<void>(
           context: context,
           barrierDismissible: false,
-          builder: (context) => ErrorDialog(
+          builder: (context) => const ErrorDialog(
             title: 'Incorrect Password',
             text: 'Your old password is incorrect.\nPlease try again.',
           ),
@@ -122,7 +126,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     showDialog<void>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => ErrorDialog(
+                      builder: (context) => const ErrorDialog(
                         title: 'Invalid Password',
                         text:
                             'Please make sure your password \ncontain 8 digits or more',
@@ -134,7 +138,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     showDialog<void>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => ErrorDialog(
+                      builder: (context) => const ErrorDialog(
                         title: 'Doesn\'t Match',
                         text: 'Please make sure your passwords \nare match',
                       ),

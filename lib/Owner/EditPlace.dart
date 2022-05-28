@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Dialogs/Dialogs.dart';
-import 'package:flutter_v1/OwnedPlacesPage.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
 import 'package:flutter_v1/Services/StorageService.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
 import 'dart:io';
 import 'package:flutter_v1/constants/constants.dart';
 import 'package:flutter_v1/models/PlaceModel.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../Templates/ProfilePageTemplate.dart';
+import '../Widgets/LinearColoredButton.dart';
+import 'OwnedPlacesPage.dart';
+
 
 class EditPlace extends StatefulWidget {
    EditPlace(this.costPerPerson,
@@ -27,7 +30,7 @@ class _EditPlaceState extends State<EditPlace> {
   File? _img;
 
   getPlace() async {
-    var place = await placesref.doc(widget.currentPlaceID).get();
+    var place = await placesReference.doc(widget.currentPlaceID).get();
     _placePicURL = place.data()!['placepicURL'];
   }
 
@@ -48,7 +51,7 @@ class _EditPlaceState extends State<EditPlace> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: placesref.doc(widget.currentPlaceID).get(),
+      future: placesReference.doc(widget.currentPlaceID).get(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
           return const Center(
@@ -59,9 +62,9 @@ class _EditPlaceState extends State<EditPlace> {
           );
         }
         PlaceModel placeModel = PlaceModel.fromDoc(snapshot.data);
-        return ImageContainerStackTemplate(
-          displayImage(),
-          Column(
+        return ProfilePageTemplate(
+          image: displayImage(),
+          topChild: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -85,8 +88,8 @@ class _EditPlaceState extends State<EditPlace> {
                     GestureDetector(
                       onTap: () {
                         try {
-                          placesref.doc(widget.currentPlaceID).delete();
-                          usersref.doc(AuthServices.signedInUser.id).update(
+                          placesReference.doc(widget.currentPlaceID).delete();
+                          usersReference.doc(AuthServices.signedInUser.id).update(
                             {
                               'ownedplaces': FieldValue.arrayRemove(
                                   [widget.currentPlaceID])
@@ -178,7 +181,7 @@ class _EditPlaceState extends State<EditPlace> {
               )
             ],
           ),
-          Padding(
+          bottomChild: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +276,7 @@ class _EditPlaceState extends State<EditPlace> {
                   min: 0,
                   max: 25,
                   divisions: 25,
-                  activeColor: const Color(0xff3AAEC2),
+                  activeColor: secondaryColor,
                   inactiveColor: const Color(0xffffffff),
                   onChanged: (newValue) {
                     setState(
@@ -384,7 +387,7 @@ class _EditPlaceState extends State<EditPlace> {
                         showDialog<void>(
                           context: context,
                           barrierDismissible: false,
-                          builder: (context) => ErrorDialog(
+                          builder: (context) => const ErrorDialog(
                             title: 'Nothing\'s Changed',
                             text:
                                 'You have not make any changes,\nno effect will applied.',
@@ -395,12 +398,12 @@ class _EditPlaceState extends State<EditPlace> {
                           showDialog<void>(
                             context: context,
                             barrierDismissible: false,
-                            builder: (context) => WaitingDialog(),
+                            builder: (context) => const WaitingDialog(),
                           );
                           _placePicURL =
                               await StorageService.uploadPlacePicture(
                                   _placePicURL, _img!);
-                          placesref.doc(widget.currentPlaceID).update(
+                          placesReference.doc(widget.currentPlaceID).update(
                             {
                               'placepicURL': _placePicURL,
                             },
@@ -409,7 +412,7 @@ class _EditPlaceState extends State<EditPlace> {
                         }
                         setState(
                           () {
-                            placesref.doc(widget.currentPlaceID).update(
+                            placesReference.doc(widget.currentPlaceID).update(
                               {
                                 'description': _description == ''
                                     ? placeModel.description

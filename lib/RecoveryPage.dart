@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
+import 'package:flutter_v1/constants/constants.dart';
+
+import 'Templates/SignInPageTemplate.dart';
+import 'Widgets/BuildTextField.dart';
+import 'Widgets/LinearColoredButton.dart';
 
 class RecoveryPage extends StatefulWidget {
   const RecoveryPage({Key? key}) : super(key: key);
@@ -22,15 +26,15 @@ class _RecoveryPageState extends State<RecoveryPage> {
             Padding(
               padding: const EdgeInsets.only(top: 40.0),
               child: Text(
-                'Please enter your Email address to\n ' //todo
-                'let us send you a recovery code.',
+                'Please enter your Email address to\n '
+                'let us send you a recovery link.',
                 style: TextStyle(fontSize: 18.0, color: Colors.grey.shade600),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: Text(
-                'note : you will receive a code within\n '
+                'note : you will receive a link within\n '
                 '1 minute',
                 style: TextStyle(fontSize: 18.0, color: Colors.grey.shade600),
               ),
@@ -46,7 +50,7 @@ class _RecoveryPageState extends State<RecoveryPage> {
               ),
             ),
             const SizedBox(
-              height: 140,
+              height: 120,
             ),
             GestureDetector(
               onTap: () {
@@ -80,7 +84,7 @@ class _RecoveryPageState extends State<RecoveryPage> {
                         'Login',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Color(0xff08AFBF),
+                          color: secondaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

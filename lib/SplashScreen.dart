@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/SignInPage.dart';
+import 'package:flutter_v1/constants/constants.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: <Color>[Color(0xff02ECB9), Color(0xff0C89C3)],
+          colors: linearGradiantColors,
           tileMode: TileMode.repeated,
         ),
       ),
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset(
               'image/logo.png',
-              height: 120,
+              height: 200,
             ),
             const SizedBox(
               height: 20,

@@ -1,8 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  String id, name, email, password, phoneNO, city, userType, profilePicURL;
-  List ownedPlacesIds = [], recentlyVisitedIds = [], favoritePlacesIds = [];
+  String id,
+      name,
+      email,
+      password,
+      phoneNO,
+      city,
+      userType,
+      profilePicURL;
+  List ownedPlacesIds = [],
+      recentlyVisitedIds = [],
+      favoritePlacesIds = [];
   UserModel({
     this.id = '',
     this.name = '',

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
-import 'package:flutter_v1/Templates/Templates.dart';
+
+import '../Templates/DashboardTemplate.dart';
+import '../Widgets/PlaceWidget.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
@@ -62,7 +64,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     return DashboardTemplate(
-      backgroundImagePath: 'image/petra.jpg',
       pageTittle: 'Favorites',
       child: Padding(
         padding: const EdgeInsets.all(8.0),

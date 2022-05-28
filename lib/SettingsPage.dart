@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_v1/ChangePasswordPage.dart';
 import 'package:flutter_v1/EditInfoPage.dart';
 import 'package:flutter_v1/MenuDrawerPage.dart';
-import 'package:flutter_v1/ProfilePage.dart';
 import 'package:flutter_v1/Services/AuthServices.dart';
+import 'package:flutter_v1/constants/constants.dart';
 
 class SettingPage extends StatefulWidget {
+  const SettingPage({Key? key}) : super(key: key);
+
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -15,17 +16,14 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MenuDrawerPage(),
+      drawer: const MenuDrawerPage(),
       body: Builder(
         builder: (context) => Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: <Color>[
-                Color(0xff02ECB9),
-                Color(0xff0C89C3)
-              ], // red to yellow
+              colors: linearGradiantColors, // red to yellow
               tileMode: TileMode.repeated,
             ),
           ),
@@ -43,18 +41,18 @@ class _SettingPageState extends State<SettingPage> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_back,
                           color: Colors.white,
                           size: 35,
                         ),
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       flex: 15,
                       child: Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 55.0),
+                          padding: EdgeInsets.only(right: 55.0),
                           child: Text(
                             'Settings',
                             style: TextStyle(fontSize: 27, color: Colors.white),
@@ -66,20 +64,20 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric( horizontal: 60),
+                padding: const EdgeInsets.symmetric(horizontal: 60),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const SettingsContainer(
+                        icon: Icons.lock,
+                        destination: ChangePasswordPage(),
+                        tittle: 'Security',
+                        hint: 'Change Password '),
                     SettingsContainer(
-                        Icons.lock,
-                        ChangePasswordPage(),
-                        'Security',
-                        'Change Password '),
-                    SettingsContainer(
-                        Icons.edit,
-                        EditInfoPage(),
-                        'Me',
-                        AuthServices.signedInUser.name),
+                        icon: Icons.edit,
+                        destination: const EditInfoPage(),
+                        tittle: 'Me',
+                        hint: AuthServices.signedInUser.name),
                   ],
                 ),
               ),
@@ -102,7 +100,7 @@ class _SettingPageState extends State<SettingPage> {
                     Padding(
                       padding: EdgeInsets.only(left: 50.0),
                       child: Text(
-                        'T3leleh@gmail.com',
+                        'Hangout@gmail.com',
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
@@ -118,11 +116,17 @@ class _SettingPageState extends State<SettingPage> {
 }
 
 class SettingsContainer extends StatefulWidget {
-  SettingsContainer(this.icon, this.nextpage, this.text1, this.text2);
-  IconData icon;
-  Widget nextpage;
-  String text1;
-  String text2;
+  const SettingsContainer(
+      {required this.icon,
+      required this.destination,
+      this.tittle = '',
+      this.hint = '',
+      Key? key})
+      : super(key: key);
+  final IconData icon;
+  final Widget destination;
+  final String tittle;
+  final String hint;
   @override
   _SettingsContainerState createState() => _SettingsContainerState();
 }
@@ -132,16 +136,23 @@ class _SettingsContainerState extends State<SettingsContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return SafeArea(child: widget.nextpage);
-          }));
-        });
+        setState(
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SafeArea(child: widget.destination);
+                },
+              ),
+            );
+          },
+        );
       },
       child: Padding(
         padding: const EdgeInsets.all(7.5),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(20),
             ),
@@ -158,24 +169,24 @@ class _SettingsContainerState extends State<SettingsContainer> {
                   color: Colors.white,
                   size: 27,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
-                  widget.text1,
-                  style: TextStyle(
+                  widget.tittle,
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                       color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    widget.text2,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    widget.hint,
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ],
