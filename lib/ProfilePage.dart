@@ -511,14 +511,6 @@ class _RecentWidgetState extends State<RecentWidget> {
             ),
           );
         } catch (e) {
-          showDialog<void>(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => ErrorDialog(
-              title: 'ERROR',
-              text: e.toString(),
-            ),
-          );
           return Container();
         }
       },

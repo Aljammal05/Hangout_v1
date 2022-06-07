@@ -30,11 +30,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       barrierDismissible: false,
       builder: (context) => const WaitingDialog(),
     );
-    user!.reauthenticateWithCredential(cred).then(
-      (value) {
-        user.updatePassword(newPassword).then(
-          (_) {
-            usersReference.doc(AuthServices.signedInUser.id).update(
+    await user!.reauthenticateWithCredential(cred).then(
+      (value) async{
+       await user.updatePassword(newPassword).then(
+          (_) async{
+            await usersReference.doc(AuthServices.signedInUser.id).update(
               {'password': newPassword},
             );
             AuthServices.signedInUser = UserModel();

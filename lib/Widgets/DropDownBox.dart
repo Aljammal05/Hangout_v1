@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_v1/constants/constants.dart';
 
 class DropDownBox extends StatefulWidget {
   const DropDownBox(
@@ -39,7 +40,7 @@ class _DropDownBoxState extends State<DropDownBox> {
           ),
           isExpanded: true,
           //menuMaxHeight: 200,
-          dropdownColor: const Color(0xb83AAEC2),
+          dropdownColor: secondaryColorHalfOpacity,
           iconEnabledColor: Colors.white,
           hint: Text(
             widget.hint,

@@ -20,7 +20,7 @@ class EditEmailPage extends StatefulWidget {
 class _EditEmailPageState extends State<EditEmailPage> {
   String _email = '', _password = '';
 
-  void changeEmail(String newEmail, String currentPassword) {
+  void changeEmail(String newEmail, String currentPassword) async{
     final user = FirebaseAuth.instance.currentUser;
     final cred = EmailAuthProvider.credential(
         email: widget.email, password: currentPassword);
@@ -30,11 +30,11 @@ class _EditEmailPageState extends State<EditEmailPage> {
       builder: (context) => const WaitingDialog(),
     );
 
-    user!.reauthenticateWithCredential(cred).then(
-      (value) {
-        user.updateEmail(newEmail).then(
-          (_) {
-            usersReference
+    await user!.reauthenticateWithCredential(cred).then(
+      (value) async{
+        await user.updateEmail(newEmail).then(
+          (_) async{
+            await usersReference
                 .doc(AuthServices.signedInUser.id)
                 .update({'email': newEmail});
             AuthServices.signedInUser = UserModel();

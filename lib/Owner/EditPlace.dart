@@ -12,10 +12,8 @@ import '../Templates/ProfilePageTemplate.dart';
 import '../Widgets/LinearColoredButton.dart';
 import 'OwnedPlacesPage.dart';
 
-
 class EditPlace extends StatefulWidget {
-   EditPlace(this.costPerPerson,
-      {required this.currentPlaceID, Key? key} )
+  EditPlace(this.costPerPerson, {required this.currentPlaceID, Key? key})
       : super(key: key);
   final String currentPlaceID;
   double costPerPerson;
@@ -87,41 +85,57 @@ class _EditPlaceState extends State<EditPlace> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        try {
-                          placesReference.doc(widget.currentPlaceID).delete();
-                          usersReference.doc(AuthServices.signedInUser.id).update(
-                            {
-                              'ownedplaces': FieldValue.arrayRemove(
-                                  [widget.currentPlaceID])
-                            },
-                          );
-                          setState(
-                            () {
-                              AuthServices.signedInUser.ownedPlacesIds
-                                  .remove(widget.currentPlaceID);
-                            },
-                          );
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const SafeArea(
-                                  child: OwnedPlacesPage(),
-                                );
-                              },
-                            ),
-                          );
-                        } catch (e) {
-                          showDialog<void>(
+                        showDialog<void>(
                             context: context,
                             barrierDismissible: false,
-                            builder: (context) => ErrorDialog(
-                              title: 'ERROR',
-                              text: e.toString(),
-                            ),
-                          );
-                        }
+                            builder: (context) => WarningDialog(
+                                  title: 'Delete Place',
+                                  text:
+                                      'Are you sure you want to \ndelete this place?',
+                                  buttonTittle: 'Delete',
+                                  onAccept: () async {
+                                    try {
+                                      await placesReference
+                                          .doc(widget.currentPlaceID)
+                                          .delete();
+                                      await usersReference
+                                          .doc(AuthServices.signedInUser.id)
+                                          .update(
+                                        {
+                                          'ownedplaces': FieldValue.arrayRemove(
+                                              [widget.currentPlaceID])
+                                        },
+                                      );
+                                      setState(
+                                        () {
+                                          AuthServices
+                                              .signedInUser.ownedPlacesIds
+                                              .remove(widget.currentPlaceID);
+                                        },
+                                      );
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return const SafeArea(
+                                              child: OwnedPlacesPage(),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      showDialog<void>(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (context) => ErrorDialog(
+                                          title: 'ERROR',
+                                          text: e.toString(),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ));
                       },
                       child: const Icon(
                         Icons.delete,
@@ -379,7 +393,7 @@ class _EditPlaceState extends State<EditPlace> {
                   padding: const EdgeInsets.all(12.0),
                   child: GestureDetector(
                     onTap: () async {
-                      if (widget.costPerPerson == placeModel.costPerPerson&&
+                      if (widget.costPerPerson == placeModel.costPerPerson &&
                           _phoneNo == '' &&
                           _websiteURL == '' &&
                           _description == '' &&
@@ -429,7 +443,6 @@ class _EditPlaceState extends State<EditPlace> {
                                     : _websiteURL,
                               },
                             );
-                            //todo update Auth.Signedin
                             Navigator.push(
                               context,
                               MaterialPageRoute(

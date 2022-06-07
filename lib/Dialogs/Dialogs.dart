@@ -68,7 +68,7 @@ class WarningDialog extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => onAccept,
+                      onPressed: () => onAccept(),
                       child: Text(
                         buttonTittle,
                         style:
